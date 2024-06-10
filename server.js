@@ -1,13 +1,32 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fetch = require('node-fetch');
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 const TELEGRAM_BOT_TOKEN = '7402156358:AAGIsNZJiMSPV2y70JefMxireI-iTyyI8w4';
 const WEB_APP_URL = 'https://ashatheo.github.io/telegram-clicker-test/';
 
+let userData = {}; // Сохранение данных пользователей в памяти
+
 app.use(bodyParser.json());
+app.use(express.static('public'));
+
+// Получение данных пользователя
+app.post('/getUserData', (req, res) => {
+    const userId = req.body.userId;
+    if (userData[userId]) {
+        res.json(userData[userId]);
+    } else {
+        res.json({ counter: 0, pointsPerClick: 1, upgradeCost: 10, energyUpgradeCost: 500, currentEnergy: 3000, maxEnergy: 3000 });
+    }
+});
+
+// Сохранение данных пользователя
+app.post('/saveUserData', (req, res) => {
+    const userId = req.body.userId;
+    userData[userId] = req.body.data;
+    res.sendStatus(200);
+});
 
 app.post(`/webhook/${TELEGRAM_BOT_TOKEN}`, (req, res) => {
     const message = req.body.message;
@@ -61,12 +80,11 @@ function sendWebApp(chatId, text, webAppUrl) {
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-    setWebhook();
 });
 
 // Set webhook for Telegram
 const setWebhook = async () => {
-    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/setWebhook?url=https://ashatheo.github.io/telegram-clicker-test/webhook/${TELEGRAM_BOT_TOKEN}`;
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/setWebhook?url=https://YOUR_NGROK_URL/webhook/${TELEGRAM_BOT_TOKEN}`;
     const response = await fetch(url);
     const data = await response.json();
     console.log(data);
