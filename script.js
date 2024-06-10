@@ -1,10 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const TELEGRAM_WEB_APP = Telegram.WebApp;
-
-    TELEGRAM_WEB_APP.ready();
-
-    const user = TELEGRAM_WEB_APP.initDataUnsafe.user;
-    const userId = user.id;
+    const userId = localStorage.getItem('userId');
+    
+    if (!userId) {
+        return;
+    }
 
     let counter = 0;
     let pointsPerClick = 1;

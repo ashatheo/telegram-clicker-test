@@ -1,11 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const crypto = require('crypto');
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const TELEGRAM_BOT_TOKEN = '7402156358:AAGIsNZJiMSPV2y70JefMxireI-iTyyI8w4';
-const WEB_APP_URL = 'https://ashatheo.github.io/telegram-clicker-test/';
+const TELEGRAM_BOT_TOKEN = 'YOUR_TELEGRAM_BOT_TOKEN';
+const SECRET_KEY = crypto.createHash('sha256').update(TELEGRAM_BOT_TOKEN).digest();
 
 let userData = {}; // Сохранение данных пользователей в памяти
 
@@ -27,6 +28,21 @@ app.post('/saveUserData', (req, res) => {
     const userId = req.body.userId;
     userData[userId] = req.body.data;
     res.sendStatus(200);
+});
+
+// Обработка авторизации
+app.post('/auth', (req, res) => {
+    const user = req.body;
+    const dataCheckString = Object.keys(user).filter(key => key !== 'hash').sort().map(key => `${key}=${user[key]}`).join('\n');
+    const hash = crypto.createHmac('sha256', SECRET_KEY).update(dataCheckString).digest('hex');
+
+    if (hash === user.hash) {
+        // Успешная авторизация
+        res.json({ success: true });
+    } else {
+        // Ошибка авторизации
+        res.json({ success: false });
+    }
 });
 
 app.post(`/webhook/${TELEGRAM_BOT_TOKEN}`, (req, res) => {
@@ -86,7 +102,7 @@ app.listen(PORT, () => {
 
 // Set webhook for Telegram
 const setWebhook = async () => {
-    const ngrokUrl = 'https://f4ac08d2249b.ngrok.app'; // замените на ваш ngrok URL
+    const ngrokUrl = 'https://your-ngrok-url.ngrok.io'; // замените на ваш ngrok URL
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/setWebhook?url=${ngrokUrl}/webhook/${TELEGRAM_BOT_TOKEN}`;
     const response = await fetch(url);
     const data = await response.json();
