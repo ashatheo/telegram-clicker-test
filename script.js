@@ -1,4 +1,3 @@
-// script.js
 document.addEventListener('DOMContentLoaded', () => {
     const TELEGRAM_WEB_APP = Telegram.WebApp;
 
