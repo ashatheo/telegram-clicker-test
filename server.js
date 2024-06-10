@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const fetch = require('node-fetch');
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 const TELEGRAM_BOT_TOKEN = '7402156358:AAGIsNZJiMSPV2y70JefMxireI-iTyyI8w4';
@@ -47,9 +48,9 @@ app.post(`/webhook/${TELEGRAM_BOT_TOKEN}`, (req, res) => {
     res.sendStatus(200);
 });
 
-function sendMessage(chatId, text) {
+async function sendMessage(chatId, text) {
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-    fetch(url, {
+    await fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -61,9 +62,9 @@ function sendMessage(chatId, text) {
     });
 }
 
-function sendWebApp(chatId, text, webAppUrl) {
+async function sendWebApp(chatId, text, webAppUrl) {
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-    fetch(url, {
+    await fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -80,11 +81,13 @@ function sendWebApp(chatId, text, webAppUrl) {
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    setWebhook();
 });
 
 // Set webhook for Telegram
 const setWebhook = async () => {
-    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/setWebhook?url=https://YOUR_NGROK_URL/webhook/${TELEGRAM_BOT_TOKEN}`;
+    const ngrokUrl = 'https://f4ac08d2249b.ngrok.app'; // замените на ваш ngrok URL
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/setWebhook?url=${ngrokUrl}/webhook/${TELEGRAM_BOT_TOKEN}`;
     const response = await fetch(url);
     const data = await response.json();
     console.log(data);

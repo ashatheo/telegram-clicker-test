@@ -4,11 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     TELEGRAM_WEB_APP.ready();
 
     const user = TELEGRAM_WEB_APP.initDataUnsafe.user;
-
-    console.log(`User ID: ${user.id}`);
-    console.log(`Username: ${user.username}`);
-    console.log(`First Name: ${user.first_name}`);
-    console.log(`Last Name: ${user.last_name}`);
+    const userId = user.id;
 
     let counter = 0;
     let pointsPerClick = 1;
@@ -53,32 +49,35 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const saveGame = () => {
-        localStorage.setItem('counter', counter);
-        localStorage.setItem('pointsPerClick', pointsPerClick);
-        localStorage.setItem('upgradeCost', upgradeCost);
-        localStorage.setItem('energyUpgradeCost', energyUpgradeCost);
-        localStorage.setItem('currentEnergy', currentEnergy);
-        localStorage.setItem('maxEnergy', maxEnergy);
-        localStorage.setItem('lastUpdate', Date.now());
+        const data = { counter, pointsPerClick, upgradeCost, energyUpgradeCost, currentEnergy, maxEnergy };
+        fetch('/saveUserData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId, data })
+        });
     };
 
     const loadGame = () => {
-        counter = parseInt(localStorage.getItem('counter')) || 0;
-        pointsPerClick = parseInt(localStorage.getItem('pointsPerClick')) || 1;
-        upgradeCost = parseInt(localStorage.getItem('upgradeCost')) || 10;
-        energyUpgradeCost = parseInt(localStorage.getItem('energyUpgradeCost')) || 500;
-        currentEnergy = parseFloat(localStorage.getItem('currentEnergy')) || 3000;
-        maxEnergy = parseInt(localStorage.getItem('maxEnergy')) || 3000;
+        fetch('/getUserData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            counter = data.counter;
+            pointsPerClick = data.pointsPerClick;
+            upgradeCost = data.upgradeCost;
+            energyUpgradeCost = data.energyUpgradeCost;
+            currentEnergy = data.currentEnergy;
+            maxEnergy = data.maxEnergy;
 
-        const lastUpdate = parseInt(localStorage.getItem('lastUpdate')) || Date.now();
-        const timeSinceLastUpdate = Date.now() - lastUpdate;
-        const energyGained = (timeSinceLastUpdate / 1000) * energyPerSecond;
-
-        currentEnergy += energyGained;
-        if (currentEnergy > maxEnergy) {
-            currentEnergy = maxEnergy;
-        }
-        updateDisplay();
+            updateDisplay();
+        });
     };
 
     clickImage.addEventListener('click', () => {
