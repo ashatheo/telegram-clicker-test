@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let's Bong</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>Let's Bong</h1>
+        <div id="counter">0</div>
+        <div id="energy">
+            <div>Energy:</div>
+            <div><span id="currentEnergy">3000</span> / <span id="maxEnergy">3000</span></div>
+            <div id="energyRestoreTime">Time to full energy: <span id="restoreTime">00:00:00</span></div>
+        </div>
+        <div class="box">
+            <img src="carrot.png" alt="Carrot" class="foreground" id="clickImage">
+            <img src="carrot.png" alt="Carrot" class="background">
+        </div>
+        <div id="upgrades">
+            <h2>Upgrades</h2>
+            <button id="upgradeButton">Upgrade Points per Click (Cost: 10)</button>
+            <button id="energyUpgradeButton">Upgrade Max Energy (Cost: 500)</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

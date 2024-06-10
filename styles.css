@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: .3s all;
+}
+
+body {
+  height: 100vh;
+  background: #BFFF00;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+}
+
+#app {
+  text-align: center;
+}
+
+#counter {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+#energy {
+  font-size: 1em;
+  margin-bottom: 20px;
+}
+
+#energy div:first-child {
+  font-size: 1.2em; /* Увеличиваем шрифт надписи Energy */
+  margin-bottom: 5px;
+}
+
+#energy span {
+  font-size: 1em; /* Увеличиваем шрифт у текущей и максимальной энергии */
+}
+
+#energyRestoreTime {
+  font-size: 0.8em;
+  margin-top: 10px;
+}
+
+.box {
+  position: relative;
+  width: 256px;
+  height: 256px;
+  margin: 0 auto; /* Центрируем элемент по горизонтали */
+}
+
+span {
+  display: flex;
+  justify-content: center;
+  font-size: 2em;
+  color: #fff;
+  font-weight: bold;
+}
+
+.box img:active {
+  transform: scale(0.97);
+}
+
+.foreground {
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 256px;
+  height: 256px;
+  z-index: 0;
+  filter: blur(15px);
+}
+
+#upgrades {
+  margin-top: 20px;
+}
+
+#upgradeButton,
+#energyUpgradeButton {
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  display: block;
+  margin: 10px auto;
+}
