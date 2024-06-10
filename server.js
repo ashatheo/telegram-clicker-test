@@ -5,7 +5,8 @@ const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fet
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const TELEGRAM_BOT_TOKEN = 'YOUR_TELEGRAM_BOT_TOKEN';
+const TELEGRAM_BOT_TOKEN = '7402156358:AAGIsNZJiMSPV2y70JefMxireI-iTyyI8w4';
+const WEB_APP_URL = 'https://ashatheo.github.io/telegram-clicker-test/';
 const SECRET_KEY = crypto.createHash('sha256').update(TELEGRAM_BOT_TOKEN).digest();
 
 let userData = {}; // Сохранение данных пользователей в памяти
@@ -102,7 +103,7 @@ app.listen(PORT, () => {
 
 // Set webhook for Telegram
 const setWebhook = async () => {
-    const ngrokUrl = 'https://your-ngrok-url.ngrok.io'; // замените на ваш ngrok URL
+    const ngrokUrl = ' https://f4ac08d2249b.ngrok.app'; // замените на ваш ngrok URL
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/setWebhook?url=${ngrokUrl}/webhook/${TELEGRAM_BOT_TOKEN}`;
     const response = await fetch(url);
     const data = await response.json();
